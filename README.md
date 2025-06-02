@@ -1,93 +1,133 @@
-# Peer-to-Peer-Carpooling
+# P2P拼车系统 (Peer-to-Peer Carpooling)
 
-The project is created using  HTML, CSS, JavaScript, Python, Django and MySQL. 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Python](https://img.shields.io/badge/Python-3.8-green.svg)
+![Django](https://img.shields.io/badge/Django-latest-green.svg)
 
-# Home Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/1ff01920-17a4-4ce5-8a0e-de7b2f26aba0)
+## 项目简介
 
+P2P拼车系统是一个现代化的点对点拼车平台，旨在为用户提供便捷、环保、经济的出行解决方案。通过该平台，车主可以发布行程信息，乘客可以搜索并预订合适的拼车路线，实现资源共享和高效出行。
 
-# Home Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/15d49f14-4368-426c-a6bc-0e999d9ea00d)
+### 主要特点
 
+- 🚗 智能路线匹配
+- 👥 实时用户互动
+- 🔐 安全的用户认证系统
+- 📱 响应式现代界面设计
+- 💰 便捷的在线预订系统
+- 🗺️ 直观的行程管理
 
-# Registration Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/0a7ca281-bf66-477d-af32-01194de97023)
+## 技术栈
 
+- **前端**: HTML5, CSS3, JavaScript
+- **后端**: Python, Django
+- **数据库**: MySQL
+- **开发工具**: VS Code
+- **版本控制**: Git
 
-# Login Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/d2c30fac-7055-41da-9002-13f1542e1267)
+## 功能模块
 
+1. **用户管理**
+   - 注册与登录
+   - 个人信息管理
+   - 密码修改
 
-# Contact Us Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/d0b941b3-b94f-4477-b0c4-303fbe596438)
+2. **行程管理**
+   - 发布行程
+   - 搜索行程
+   - 行程预订
+   - 行程状态追踪
 
+3. **车辆管理**
+   - 添加车辆信息
+   - 管理车辆状态
+   - 查看所有车辆
 
-# Dashboard Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/8d33dfc5-9752-40da-a7e3-e15228585234)
+4. **预订系统**
+   - 在线预订
+   - 预订确认
+   - 预订历史记录
 
+## 快速开始
 
-# Search Car Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/c1f68488-b9c3-4dba-a04d-224d8e8dc56e)
+### 环境要求
 
+- Python 3.8
+- MySQL（最新版本）
+- VS Code
 
-# Searched Cars according to dates and cities
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/cd7fed28-2d66-4561-a10e-be0ab3c4d57b)
+### 安装步骤
 
+1. **克隆项目**
+   ```bash
+   git clone [项目地址]
+   cd Peer-to-Peer-Carpooling
+   ```
 
-# Car Booking Details
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/c20cc281-1d99-417c-bb2b-503f5181840e)
+2. **创建并激活虚拟环境**
+   ```bash
+   python -m venv env
+   .\env\Scripts\activate
+   ```
 
+3. **安装依赖**
+   ```bash
+   pip install django
+   pip install requests
+   pip install cryptography
+   pip install mysql-connector-python
+   pip install pillow
+   pip install pymysql
+   ```
 
-# Car Booked Successfully
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/37eeafe0-332f-421c-a81c-50e93d4fa331)
+4. **配置数据库**
+   - 在MySQL中创建数据库
+   - 更新 `carpool/carpool/settings.py` 中的数据库配置
+   - 更新 `carpool/website/views.py` 中的数据库连接信息
 
+5. **运行数据库迁移**
+   ```bash
+   cd carpool
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
 
-# All Cars Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/21c02b47-f7b5-4a5b-9e6c-5eb66554e5a3)
+6. **启动服务器**
+   ```bash
+   python manage.py runserver
+   ```
+   访问 http://127.0.0.1:8000/ 即可使用系统
 
+## 项目结构
 
-# User Added Car Page(My Cars)
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/735123a5-d19e-4f3e-b992-2eef6d82fdf1)
+```
+Peer-to-Peer-Carpooling/
+├── carpool/
+│   ├── website/          # 主应用目录
+│   │   ├── static/     # 静态文件
+│   │   │   ├── images/ # 图片资源
+│   │   │   ├── css/    # 样式文件
+│   │   │   └── js/     # JavaScript文件
+│   │   └── templates/  # HTML模板
+│   └── env/                # 虚拟环境
+```
 
+## 注意事项
 
-# Customer Bookings Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/cd32c77d-1b11-4c1e-b4fd-6558db0c450a)
+- 所有上传的车辆图片都保存在 `static/images/cars` 目录下
+- 运行服务器时使用 `Ctrl+C` 可以停止服务
+- 确保数据库配置正确且MySQL服务正在运行
 
+## 贡献指南
 
-# Add Car Details Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/04eaaddb-9d9f-435b-b520-f9f6551178d2)
+欢迎提交问题和改进建议！如果您想为项目做出贡献，请：
 
+1. Fork 本仓库
+2. 创建您的特性分支
+3. 提交您的改动
+4. 推送到您的分支
+5. 创建一个 Pull Request
 
-# Change Password Page
-![image](https://github.com/prachik26/Peer-to-Peer-Carpooling/assets/83691953/c0eebf8a-1158-4e71-b9dc-3c9c1b950a21)
+## 许可证
 
-
-
-For the project to run, we need to install Python 3.8 version with MySQL's latest version.
-The IDE used for the project is VS Code.
-Steps for running the project:
-1. Open the Peer-to-Peer Carpooling folder in VS Code.
-2. Create an environment for the project by opening command prompt in the VS Code and run the following commands for activating the environment:
-   * python -m venv env
-   * .\env\Scripts\activate
-3. After running these commands, the environment will be activated. Now we have install the requires libraries of python. So run the following pip install commands:
-   * pip install django
-   * pip install requests
-   * pip install cryptography
-   * pip install mysql-connector-python
-   * pip install pillow
-   * pip install pymysql
-4. After installing all these libraries, we need to create a database in mysql and give it's details to the settings.py file in Peer-to-Peer Carpooling>carpool>carpool folder. The same details should be added in the views.py file in Major 2>carpool>website folder.
-5. Ater creating the database, run the following commands to run the server of Django:
-   * cd carpool
-   * python manage.py makemigrations
-   * python manage.py sqlmigrate website 0001
-   * python manage.py sqlmigrate website 0002
-   * python manage.py sqlmigrate website 0003
-   * python manage.py sqlmigrate website 0004
-   * python manage.py sqlmigrate website 0005
-   * python manage.py migrate
-   * python manage.py runserver                //This command runs the Django server and for closing the server 'Ctrl+C' should be pressed in the command prompt terminal of VS Code.
-6. The above commands will create the required tables in the database details provided by you and then run the server i.e. http://127.0.0.1:8000/ in your chrome browser.
-7. All the images of the web application gets saved in the static folder, which contains of images, javascript files, and css files. All the images of cars that are uploaded in the ADD JOURNEY DETAILS page are saved in the static>images>cars folder by default.
-8. All the html pages are present in templates folder.
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
