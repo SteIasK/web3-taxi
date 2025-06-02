@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>我的账户 - 租车系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+
+  <style>
+    /* 我的账户页面特定样式 */
+    .account-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    .account-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .account-header {
+      background: var(--primary-color);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .account-avatar {
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+
+    .account-avatar i {
+      font-size: 3rem;
+      color: var(--primary-color);
+    }
+
+    .account-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .account-username {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .account-body {
+      padding: 2rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-item.full-width {
+      grid-column: span 2;
+    }
+
+    .info-label {
+      font-size: 0.9rem;
+      color: var(--text-color);
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-label i {
+      color: var(--primary-color);
+    }
+
+    .info-value {
+      padding: 0.8rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .action-button {
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .edit-button {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .edit-button:hover {
+      background: #357abd;
+      color: white;
+      text-decoration: none;
+    }
+
+    .change-password-button {
+      background: #f8f9fa;
+      color: var(--text-color);
+      border: 2px solid #e0e0e0;
+    }
+
+    .change-password-button:hover {
+      background: #e9ecef;
+      color: var(--text-color);
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-item.full-width {
+        grid-column: span 1;
+      }
+
+      .action-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="topnav" id="myTopnav">
+    <div class="nav-content">
+      <div class="nav-brand">
+        <h1><i class="fas fa-car-side"></i> 租车系统</h1>
+      </div>
+      <div id="rest">
+        <a href="{% url 'home' %}"><i class="fas fa-home"></i> 首页</a>
+        <a href="{% url 'searchmycar' %}"><i class="fas fa-search"></i> 找车</a>
+        <a href="{% url 'allcars' %}"><i class="fas fa-car"></i> 所有车辆</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> 仪表盘</a>
+        <a href="{% url 'mycar_list' %}"><i class="fas fa-list"></i> 我的车辆</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> 退出</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="page-title">
+      <h2><i class="fas fa-user-circle"></i> 我的账户</h2>
+      <p>查看和管理您的个人信息</p>
+    </div>
+
+    <div class="account-container">
+      {% if user.is_authenticated %}
+      <div class="account-card fade-in">
+        <div class="account-header">
+          <div class="account-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="account-name">{{cust.fname}}</div>
+          <div class="account-username">@{{cust.usern}}</div>
+        </div>
+
+        <div class="account-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-envelope"></i>
+                电子邮箱
+              </div>
+              <div class="info-value">{{cust.email}}</div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-phone"></i>
+                联系电话
+              </div>
+              <div class="info-value">{{cust.mobile}}</div>
+            </div>
+
+            <div class="info-item full-width">
+              <div class="info-label">
+                <i class="fas fa-map-marker-alt"></i>
+                详细地址
+              </div>
+              <div class="info-value">{{cust.address}}</div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-city"></i>
+                城市
+              </div>
+              <div class="info-value">{{cust.city}}</div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-label">
+                <i class="fas fa-map"></i>
+                省份
+              </div>
+              <div class="info-value">{{cust.state}}</div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <a href="#" class="action-button edit-button">
+              <i class="fas fa-edit"></i> 编辑资料
+            </a>
+            <a href="{% url 'changepassword' %}" class="action-button change-password-button">
+              <i class="fas fa-key"></i> 修改密码
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-phone-alt"></i> 联系我们</h3>
+        <p><i class="fas fa-map-marker-alt"></i> 地址：XXXXXXX Street</p>
+        <p><i class="fas fa-phone"></i> 电话：1234567890</p>
+        <p><i class="fas fa-envelope"></i> 邮箱：abc@gmail.com</p>
+      </div>
+
+      <div class="footer-section">
+        <h3><i class="fas fa-link"></i> 快速链接</h3>
+        <a href="{% url 'home' %}"><i class="fas fa-chevron-right"></i> 首页</a>
+        <a href="{% url 'searchmycar' %}"><i class="fas fa-chevron-right"></i> 找车</a>
+        <a href="{% url 'allcars' %}"><i class="fas fa-chevron-right"></i> 所有车辆</a>
+        <a href="{% url 'mycar_list' %}"><i class="fas fa-chevron-right"></i> 我的车辆</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

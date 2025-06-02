@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>所有车辆 - 租车系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+
+  <style>
+    /* 车辆列表页面特定样式 */
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem 0;
+    }
+
+    .car-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .car-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .car-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .car-info {
+      padding: 1.5rem;
+    }
+
+    .car-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .car-details {
+      display: grid;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .car-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-color);
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    .car-price {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .book-button {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .book-button:hover {
+      background: #357abd;
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .cars-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="topnav" id="myTopnav">
+    <div class="nav-content">
+      <div class="nav-brand">
+        <h1><i class="fas fa-car-side"></i> 租车系统</h1>
+      </div>
+      <div id="rest">
+        <a href="{% url 'home' %}"><i class="fas fa-home"></i> 首页</a>
+        <a href="{% url 'searchmycar' %}"><i class="fas fa-search"></i> 找车</a>
+        <a href="{% url 'allcars' %}" class="active"><i class="fas fa-car"></i> 所有车辆</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> 仪表盘</a>
+        <a href="{% url 'mycar_list' %}"><i class="fas fa-list"></i> 我的车辆</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> 退出</a>
+        {% else %}
+        <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> 注册</a>
+        <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> 登录</a>
+        <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> 联系我们</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="page-title">
+      <h2><i class="fas fa-car"></i> 所有可用车辆</h2>
+      <p>浏览所有可供预订的车辆</p>
+    </div>
+
+    <div class="cars-grid">
+      {% for mycar in mycars %}
+      <div class="car-card fade-in">
+        <img class="car-image" src="{{mycar.imageURL}}" alt="{{mycar.car_name}}">
+        <div class="car-info">
+          <h3 class="car-name">{{mycar.company}} {{mycar.car_name}}</h3>
+          <div class="car-details">
+            <div class="car-detail">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>{{mycar.from_place}} - {{mycar.to_place}}</span>
+            </div>
+            <div class="car-detail">
+              <i class="fas fa-calendar-alt"></i>
+              <span>{{mycar.from_date}}</span>
+            </div>
+            {% if mycar.no_of_seats %}
+            <div class="car-detail">
+              <i class="fas fa-users"></i>
+              <span>{{mycar.no_of_seats}} 个座位</span>
+            </div>
+            {% endif %}
+          </div>
+          <div class="car-price">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>¥{{mycar.price}}/天</span>
+          </div>
+          {% if user.is_authenticated %}
+          <a href="{% url 'cardetails' mycar.pk %}" class="book-button">
+            <i class="fas fa-info-circle"></i> 查看详情
+          </a>
+          {% else %}
+          <a href="{% url 'login' %}?next={% url 'cardetails' mycar.pk %}" class="book-button">
+            <i class="fas fa-sign-in-alt"></i> 登录后预订
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-phone-alt"></i> 联系我们</h3>
+        <p><i class="fas fa-map-marker-alt"></i> 地址：XXXXXXX Street</p>
+        <p><i class="fas fa-phone"></i> 电话：1234567890</p>
+        <p><i class="fas fa-envelope"></i> 邮箱：abc@gmail.com</p>
+      </div>
+
+      <div class="footer-section">
+        <h3><i class="fas fa-link"></i> 快速链接</h3>
+        <a href="{% url 'home' %}"><i class="fas fa-chevron-right"></i> 首页</a>
+        <a href="{% url 'contact' %}"><i class="fas fa-chevron-right"></i> 联系我们</a>
+        <a href="{% url 'login' %}"><i class="fas fa-chevron-right"></i> 登录</a>
+        <a href="{% url 'register' %}"><i class="fas fa-chevron-right"></i> 注册</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

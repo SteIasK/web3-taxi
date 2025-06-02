@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>服务器错误 - 500</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/home.css'%}">
+</head>
+<body>
+    <div class="error-page">
+        <h1>500 - 服务器错误</h1>
+        <p>抱歉，服务器出现了问题。请稍后再试。</p>
+        <a href="{% url 'home' %}" class="btn">返回首页</a>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>页面未找到 - 404</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/home.css'%}">
+</head>
+<body>
+    <div class="error-page">
+        <h1>404 - 页面未找到</h1>
+        <p>抱歉，您请求的页面不存在。</p>
+        <a href="{% url 'home' %}" class="btn">返回首页</a>
+    </div>
+</body>
+</html> 

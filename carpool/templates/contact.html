@@ -1,0 +1,322 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>联系我们 - 租车系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+
+  <style>
+    /* 联系我们页面特定样式 */
+    .contact-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    .contact-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px var(--shadow-color);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .contact-info {
+      padding-right: 2rem;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .info-item {
+      margin-bottom: 2rem;
+    }
+
+    .info-item i {
+      width: 50px;
+      height: 50px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-item .topic {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .info-item .text {
+      color: var(--text-color);
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    .form-control {
+      padding: 0.8rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(53, 122, 189, 0.1);
+    }
+
+    textarea.form-control {
+      height: 120px;
+      resize: none;
+    }
+
+    .btn-primary {
+      padding: 0.8rem;
+      background: var(--primary-color);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: #357abd;
+    }
+
+    .contact-features {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px var(--shadow-color);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .feature-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-item i {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .feature-item h4 {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-item p {
+      font-size: 0.9rem;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .contact-card {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-info {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 2rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="topnav" id="myTopnav">
+    <div class="nav-content">
+      <div class="nav-brand">
+        <h1><i class="fas fa-car-side"></i> 租车系统</h1>
+      </div>
+      <div id="rest">
+        <a href="{% url 'home' %}"><i class="fas fa-home"></i> 首页</a>
+        <a href="{% url 'searchmycar' %}"><i class="fas fa-search"></i> 找车</a>
+        <a href="{% url 'allcars' %}"><i class="fas fa-car"></i> 所有车辆</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> 仪表盘</a>
+        <a href="{% url 'mycar_list' %}"><i class="fas fa-list"></i> 我的车辆</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> 退出</a>
+        {% else %}
+        <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> 注册</a>
+        <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> 登录</a>
+        <a href="{% url 'contact' %}" class="active"><i class="fas fa-envelope"></i> 联系我们</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Alert Messages -->
+  {% if messages %}
+  <div class="alert-container">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} fade show" role="alert">
+      <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+      <span>{{ message }}</span>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="page-title">
+      <h2><i class="fas fa-envelope"></i> 联系我们</h2>
+      <p>如果您有任何问题或建议，请随时与我们联系</p>
+    </div>
+
+    <div class="contact-container">
+      <div class="contact-card fade-in">
+        <div class="contact-info">
+          <div class="info-item">
+            <i class="fas fa-phone-alt"></i>
+            <div class="topic">客服热线</div>
+            <div class="text">+86 1234567890</div>
+            <div class="text">周一至周五 9:00-18:00</div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <div class="topic">电子邮箱</div>
+            <div class="text">contact@example.com</div>
+            <div class="text">support@example.com</div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-clock"></i>
+            <div class="topic">服务时间</div>
+            <div class="text">全年无休</div>
+            <div class="text">24小时在线服务</div>
+          </div>
+        </div>
+
+        <form class="contact-form" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="text" class="form-control" name="name" placeholder="您的姓名" required>
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" name="email" placeholder="您的邮箱" required>
+          </div>
+          <div class="form-group">
+            <input type="tel" class="form-control" name="phone" placeholder="您的电话">
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" name="msg" placeholder="请输入您的留言" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> 发送消息
+          </button>
+        </form>
+      </div>
+
+      <div class="contact-features fade-in">
+        <h3 class="text-center mb-4">为什么选择我们</h3>
+        <div class="features-grid">
+          <div class="feature-item">
+            <i class="fas fa-headset"></i>
+            <h4>专业客服团队</h4>
+            <p>24小时在线为您解答问题</p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-shield-alt"></i>
+            <h4>安全保障</h4>
+            <p>全方位保护您的权益</p>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-hand-holding-heart"></i>
+            <h4>优质服务</h4>
+            <p>用心服务每一位客户</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-phone-alt"></i> 联系我们</h3>
+        <p><i class="fas fa-phone"></i> 电话：1234567890</p>
+        <p><i class="fas fa-envelope"></i> 邮箱：abc@gmail.com</p>
+        <p><i class="fas fa-clock"></i> 服务时间：24小时</p>
+      </div>
+
+      <div class="footer-section">
+        <h3><i class="fas fa-link"></i> 快速链接</h3>
+        <a href="{% url 'home' %}"><i class="fas fa-chevron-right"></i> 首页</a>
+        <a href="{% url 'contact' %}"><i class="fas fa-chevron-right"></i> 联系我们</a>
+        <a href="{% url 'login' %}"><i class="fas fa-chevron-right"></i> 登录</a>
+        <a href="{% url 'register' %}"><i class="fas fa-chevron-right"></i> 注册</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

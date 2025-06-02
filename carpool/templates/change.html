@@ -1,0 +1,305 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>修改密码 - 租车系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+
+  <style>
+    /* 修改密码页面特定样式 */
+    .change-password-container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    .change-password-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .change-password-header {
+      background: var(--primary-color);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .change-password-icon {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+
+    .change-password-icon i {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+    }
+
+    .change-password-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .change-password-subtitle {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .change-password-body {
+      padding: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-color);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-label i {
+      color: var(--primary-color);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .password-toggle {
+      position: relative;
+    }
+
+    .password-toggle i {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-color);
+      opacity: 0.5;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .password-toggle i:hover {
+      opacity: 1;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+      background: #357abd;
+    }
+
+    .alert {
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .alert-warning {
+      background-color: #fff3cd;
+      border-color: #ffeeba;
+      color: #856404;
+    }
+
+    @media (max-width: 576px) {
+      .change-password-container {
+        padding: 1rem;
+      }
+
+      .change-password-card {
+        border-radius: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="topnav" id="myTopnav">
+    <div class="nav-content">
+      <div class="nav-brand">
+        <h1><i class="fas fa-car-side"></i> 租车系统</h1>
+      </div>
+      <div id="rest">
+        <a href="{% url 'home' %}"><i class="fas fa-home"></i> 首页</a>
+        <a href="{% url 'searchmycar' %}"><i class="fas fa-search"></i> 找车</a>
+        <a href="{% url 'allcars' %}"><i class="fas fa-car"></i> 所有车辆</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> 仪表盘</a>
+        <a href="{% url 'mycar_list' %}"><i class="fas fa-list"></i> 我的车辆</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> 退出</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="page-title">
+      <h2><i class="fas fa-key"></i> 修改密码</h2>
+      <p>请设置一个安全的新密码</p>
+    </div>
+
+    <div class="change-password-container">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle"></i>
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      <div class="change-password-card fade-in">
+        <div class="change-password-header">
+          <div class="change-password-icon">
+            <i class="fas fa-lock"></i>
+          </div>
+          <div class="change-password-title">修改密码</div>
+          <div class="change-password-subtitle">请输入您的旧密码和新密码</div>
+        </div>
+
+        <div class="change-password-body">
+          <form method="post" action="#">
+            {% csrf_token %}
+            
+            <div class="form-group">
+              <label class="form-label" for="old_password">
+                <i class="fas fa-key"></i>
+                当前密码
+              </label>
+              <div class="password-toggle">
+                <input type="password" class="form-control" id="old_password" name="old_password" placeholder="请输入当前密码" required>
+                <i class="fas fa-eye-slash toggle-password"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="new_password">
+                <i class="fas fa-lock"></i>
+                新密码
+              </label>
+              <div class="password-toggle">
+                <input type="password" class="form-control" id="new_password" name="new_password" placeholder="请输入新密码" required>
+                <i class="fas fa-eye-slash toggle-password"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="confirm_password">
+                <i class="fas fa-check-circle"></i>
+                确认新密码
+              </label>
+              <div class="password-toggle">
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="请再次输入新密码" required>
+                <i class="fas fa-eye-slash toggle-password"></i>
+              </div>
+            </div>
+
+            <button type="submit" class="submit-button">
+              <i class="fas fa-save"></i>
+              保存修改
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-phone-alt"></i> 联系我们</h3>
+        <p><i class="fas fa-map-marker-alt"></i> 地址：XXXXXXX Street</p>
+        <p><i class="fas fa-phone"></i> 电话：1234567890</p>
+        <p><i class="fas fa-envelope"></i> 邮箱：abc@gmail.com</p>
+      </div>
+
+      <div class="footer-section">
+        <h3><i class="fas fa-link"></i> 快速链接</h3>
+        <a href="{% url 'home' %}"><i class="fas fa-chevron-right"></i> 首页</a>
+        <a href="{% url 'searchmycar' %}"><i class="fas fa-chevron-right"></i> 找车</a>
+        <a href="{% url 'allcars' %}"><i class="fas fa-chevron-right"></i> 所有车辆</a>
+        <a href="{% url 'mycar_list' %}"><i class="fas fa-chevron-right"></i> 我的车辆</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+  <script>
+    // 密码显示/隐藏切换
+    document.querySelectorAll('.toggle-password').forEach(function(toggle) {
+      toggle.addEventListener('click', function() {
+        const input = this.previousElementSibling;
+        if (input.type === 'password') {
+          input.type = 'text';
+          this.classList.remove('fa-eye-slash');
+          this.classList.add('fa-eye');
+        } else {
+          input.type = 'password';
+          this.classList.remove('fa-eye');
+          this.classList.add('fa-eye-slash');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

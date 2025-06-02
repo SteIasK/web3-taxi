@@ -1,0 +1,402 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>我的车辆 - 租车系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/base.css' %}">
+
+  <style>
+    /* 我的车辆页面特定样式 */
+    .cars-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .car-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .car-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .car-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .car-info {
+      padding: 1.5rem;
+    }
+
+    .car-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .car-id {
+      font-size: 0.9rem;
+      color: var(--text-color);
+      opacity: 0.6;
+    }
+
+    .car-details {
+      display: grid;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .car-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+
+    .car-detail i {
+      width: 20px;
+      color: var(--primary-color);
+    }
+
+    .car-price {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .car-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .car-button {
+      flex: 1;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .edit-button {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .edit-button:hover {
+      background: #357abd;
+      color: white;
+      text-decoration: none;
+    }
+
+    .delete-button {
+      background: var(--error-color);
+      color: white;
+    }
+
+    .delete-button:hover {
+      background: #d32f2f;
+      color: white;
+      text-decoration: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      color: var(--text-color);
+      opacity: 0.3;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+      color: var(--text-color);
+      margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+      color: var(--text-color);
+      opacity: 0.8;
+      margin-bottom: 2rem;
+    }
+
+    .add-car-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 2rem;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-car-button:hover {
+      background: #357abd;
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .cars-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 添加新样式 */
+    .car-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .action-button {
+      flex: 1;
+      padding: 0.5rem;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .view-button {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .view-button:hover {
+      background: #357abd;
+      color: white;
+      text-decoration: none;
+    }
+
+    .delete-button {
+      background: #dc3545;
+      color: white;
+    }
+
+    .delete-button:hover {
+      background: #c82333;
+      color: white;
+      text-decoration: none;
+    }
+
+    /* 模态框样式 */
+    .modal-content {
+      border-radius: 12px;
+    }
+
+    .modal-header {
+      border-bottom: none;
+      padding: 1.5rem;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      border-top: none;
+      padding: 1.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1.5rem;
+      border-radius: 8px;
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+      border-color: #bd2130;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="topnav" id="myTopnav">
+    <div class="nav-content">
+      <div class="nav-brand">
+        <h1><i class="fas fa-car-side"></i> 租车系统</h1>
+      </div>
+      <div id="rest">
+        <a href="{% url 'home' %}"><i class="fas fa-home"></i> 首页</a>
+        <a href="{% url 'searchmycar' %}"><i class="fas fa-search"></i> 找车</a>
+        <a href="{% url 'allcars' %}"><i class="fas fa-car"></i> 所有车辆</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> 仪表盘</a>
+        <a href="{% url 'mycar_list' %}" class="active"><i class="fas fa-list"></i> 我的车辆</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> 退出</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="page-title">
+      <h2><i class="fas fa-car"></i> 我的车辆</h2>
+      <p>管理您发布的所有车辆信息</p>
+    </div>
+
+    <div class="cars-container">
+      {% if custs %}
+      <div class="cars-grid">
+        {% for cust in custs %}
+        <div class="car-card fade-in">
+          <img class="car-image" src="{{cust.imageURL}}" alt="{{cust.car_name}}">
+          <div class="car-info">
+            <h3 class="car-name">{{cust.company}} {{cust.car_name}}</h3>
+            <div class="car-details">
+              <div class="car-detail">
+                <i class="fas fa-hashtag"></i>
+                <span>{{cust.car_num}}</span>
+              </div>
+              <div class="car-detail">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{cust.from_place}} - {{cust.to_place}}</span>
+              </div>
+              <div class="car-detail">
+                <i class="fas fa-calendar-alt"></i>
+                <span>{{cust.from_date|date:"Y年m月d日"}} - {{cust.to_date|date:"Y年m月d日"}}</span>
+              </div>
+            </div>
+            <div class="car-price">
+              <i class="fas fa-money-bill-wave"></i>
+              <span>¥{{cust.price}}/天</span>
+            </div>
+            <div class="car-actions">
+              <a href="{% url 'cardetails' cust.pk %}" class="action-button view-button">
+                <i class="fas fa-eye"></i> 查看详情
+              </a>
+              <a href="#" class="action-button delete-button" onclick="confirmDelete({{cust.pk}})">
+                <i class="fas fa-trash-alt"></i> 删除车辆
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state fade-in">
+        <i class="fas fa-car-side"></i>
+        <h3>暂无车辆</h3>
+        <p>您还没有发布任何车辆信息</p>
+        <a href="{% url 'addmycar' %}" class="add-car-button">
+          <i class="fas fa-plus"></i> 添加车辆
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- 删除确认对话框 -->
+  <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">确认删除</h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>确定要删除这辆车吗？此操作不可恢复。</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <a href="#" id="confirmDeleteBtn" class="btn btn-danger">确认删除</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3><i class="fas fa-phone-alt"></i> 联系我们</h3>
+        <p><i class="fas fa-map-marker-alt"></i> 地址：XXXXXXX Street</p>
+        <p><i class="fas fa-phone"></i> 电话：1234567890</p>
+        <p><i class="fas fa-envelope"></i> 邮箱：abc@gmail.com</p>
+      </div>
+
+      <div class="footer-section">
+        <h3><i class="fas fa-link"></i> 快速链接</h3>
+        <a href="{% url 'home' %}"><i class="fas fa-chevron-right"></i> 首页</a>
+        <a href="{% url 'searchmycar' %}"><i class="fas fa-chevron-right"></i> 找车</a>
+        <a href="{% url 'allcars' %}"><i class="fas fa-chevron-right"></i> 所有车辆</a>
+        <a href="{% url 'addmycar' %}"><i class="fas fa-chevron-right"></i> 添加车辆</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script>
+  function confirmDelete(carId) {
+    // 阻止默认行为
+    event.preventDefault();
+    
+    // 更新确认按钮的链接
+    document.getElementById('confirmDeleteBtn').href = `/delete_car/${carId}/`;
+    
+    // 显示确认对话框
+    $('#deleteConfirmModal').modal('show');
+  }
+  </script>
+</body>
+
+</html>
